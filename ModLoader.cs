@@ -79,19 +79,7 @@ namespace RoundsModLoader
             var harmony = new Harmony("com.willis.modloader");
             harmony.PatchAll();
 
-            // Initialize mods
-            Instance.ExecuteAfterSeconds(1, () =>
-            {
-                InitializeMods(Directory.GetFiles(MOD_DIRECTORY));
-            });
-
-            // fetch card to use as a template for all custom cards
-            templateCard = (from c in CardChoice.instance.cards
-                            where c.cardName.ToLower() == "huge"
-                            select c).FirstOrDefault();
-
-            defaultCards = CardChoice.instance.cards;
-            moddedCards.AddRange(defaultCards);
+            InitializeMods(Directory.GetFiles(MOD_DIRECTORY));
         }
 
         public override void OnJoinedRoom()
@@ -238,12 +226,12 @@ namespace RoundsModLoader
 
                         modData.Add(modId, modWrapper);
 
+                        count++;
+
                         Instance.ExecuteAfterSeconds(count / 3f, () =>
                         {
                             BuildInfoPopup(modId);
                         });
-
-                        count++;
                     }
                 }
             }

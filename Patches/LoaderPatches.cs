@@ -9,6 +9,21 @@ using RoundsModLoader.Cards;
 
 namespace RoundsModLoader.Patches
 {
+    [HarmonyPatch(typeof(CardChoice), "Awake")]
+    class CardChoice_Patch
+    {
+        static void Postfix()
+        {
+            // fetch card to use as a template for all custom cards
+            ModLoader.templateCard = (from c in CardChoice.instance.cards
+                                      where c.cardName.ToLower() == "huge"
+                                      select c).FirstOrDefault();
+
+            ModLoader.defaultCards = CardChoice.instance.cards;
+            ModLoader.moddedCards.AddRange(ModLoader.defaultCards);
+        }
+    }
+
     [HarmonyPatch(typeof(ApplyCardStats), "ApplyStats")]
     class ApplyCardStats_Patch
     {
